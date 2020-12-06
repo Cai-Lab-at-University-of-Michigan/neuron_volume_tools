@@ -5,7 +5,7 @@ cimport cython
 
 @cython.boundscheck(False)  # Deactivate bounds checking
 @cython.wraparound(False)
-def mask_array( unsigned char[:,:,:] out, long[:] shape, double[:,:] hull_eqs, long num_hull_eqs ):    
+def mask_array( unsigned char[:,:,:] out, long[:] shape, double[:,:] hull_eqs, long num_hull_eqs, unsigned char val ):    
     cdef int i_size = shape[0] #this fixes python -> cython type conversion
     cdef int j_size = shape[1]
     cdef int k_size = shape[2]
@@ -21,10 +21,10 @@ def mask_array( unsigned char[:,:,:] out, long[:] shape, double[:,:] hull_eqs, l
         for j in range( shape[1] ):
             for k in range( shape[2] ):
                 if point_in_hull( i, j, k, hull_eqs, num_hull_eqs ):
-                    out[ i, j, k ] = 1
+                    out[ i, j, k ] = val
                     cnt += 1
-                else:
-                    out[ i, j, k ] = 0
+                #else: #uncomment for background clearing
+                #    out[ i, j, k ] = 0
     #print( "Integrated:", cnt ) 
     return cnt
 
